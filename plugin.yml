@@ -1,0 +1,9 @@
+name: Jump
+version: 1.0
+main: com.emonadeo.jnr.Main
+commands:
+  course:
+    aliases: c
+    usage: /<command>
+  cfg-reload:
+    usage: /<command>
