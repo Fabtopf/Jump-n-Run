@@ -22,6 +22,7 @@ public class Main extends JavaPlugin
 	public FileConfiguration prks = YamlConfiguration.loadConfiguration(f0);
 	public Map<String, String> playerInParkour = new HashMap<String, String>();
 	public Map<String, Integer> playerPoints = new HashMap<String, Integer>();
+	public Map<String, Integer> playerTimes = new HashMap<String, Integer>();
 	public int pointsGoal = 8;
 	
 	public Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();

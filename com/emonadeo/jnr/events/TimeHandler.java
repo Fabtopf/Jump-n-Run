@@ -17,8 +17,7 @@ public class TimeHandler implements Listener
 {
 	Main main;
 	
-	private int minutes;
-	private int seconds;
+	private int time;
 	public int pointsGoal;
 	
 	public TimeHandler(Main main)
@@ -32,20 +31,22 @@ public class TimeHandler implements Listener
 		main.obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		if(!(e.getPlayer().isOp()))
-		{
-			minutes = main.getConfig().getInt("Minutes");
-			seconds = main.getConfig().getInt("Seconds");
+		{   
+			time = main.getConfig().getInt("Minutes") * 60 + main.getConfig().getInt("Seconds");
+			double d = time / 60;
+			long m = (long) d;
 			pointsGoal = main.getConfig().getInt("Goal");
 			Player p = e.getPlayer();
 			p.setDisplayName("§2" + p.getName() + "§r");
 			p.setGameMode(GameMode.ADVENTURE);
 			p.getInventory().clear();
 			main.playerPoints.put(p.getName(), 0);
-			p.sendMessage("§aDu hast " + minutes + " Minuten Zeit, so viele Punkte wie möglich zu sammeln!");
-			main.obj.setDisplayName("§e" + (minutes > 9 ? minutes : "0" + minutes) + (seconds > 9 ? ":" + seconds : ":0" + seconds));
+			p.sendMessage("§aDu hast " + m + ":" + ((time % 60) > 9 ? "" : "0") + time % 60 + " Zeit, so viele Punkte wie möglich zu sammeln!");
+			main.obj.setDisplayName("§e" + m + ":" + ((time % 60) > 9 ? "" : "0") + time % 60);
 			main.scorePoints.setScore(0);
 			p.setScoreboard(main.board);
-			JoinRunnable task = new JoinRunnable(main, p, minutes, seconds);
+			main.playerTimes.put(p.getName(), time);
+			JoinRunnable task = new JoinRunnable(main, p);
 			task.setID(Bukkit.getScheduler().scheduleSyncRepeatingTask(main, task, 20L, 20L));
 		} else {
 			e.getPlayer().setDisplayName("§4" + e.getPlayer().getName() + "§r");

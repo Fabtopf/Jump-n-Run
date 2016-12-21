@@ -9,14 +9,12 @@ public class JoinRunnable implements Runnable
 {
 	Main main;
 	Player p;
-	int id, minutes, seconds;
+	int id;
 	
-	public JoinRunnable(Main main, Player p, int minutes, int seconds)
+	public JoinRunnable(Main main, Player p)
 	{
 		this.main = main;
 		this.p = p;
-		this.minutes = minutes;
-		this.seconds = seconds;
 	}
 	
 	public void setID(int id)
@@ -27,8 +25,8 @@ public class JoinRunnable implements Runnable
 	@Override
 	public void run() {
 		//Time
-		main.obj.setDisplayName("§e" + (minutes > 9 ? minutes : "0" + minutes) + (seconds > 9 ? ":" + seconds : ":0" + seconds));
-		if(minutes == 0 && seconds == 0)
+		int time = main.playerTimes.get(p.getName());
+		if(time == 0)
 		{
 			//End
 			if(main.playerPoints.get(p.getName()) >= main.pointsGoal)
@@ -38,13 +36,10 @@ public class JoinRunnable implements Runnable
 			Bukkit.getScheduler().cancelTask(id);
 		} else {
 			//Countdown
-			if(seconds == 0)
-			{
-				minutes--;
-				seconds = 59;
-			} else {
-				seconds--;
-			}
+			double d = time / 60;
+			long m = (long) d;
+			main.playerTimes.put(p.getName(), time - 1);
+			main.obj.setDisplayName("§e" + m + ":" + ((time % 60) > 9 ? "" : "0") + time % 60);
 		}
 		if(!(p.isOnline()))
 		{
